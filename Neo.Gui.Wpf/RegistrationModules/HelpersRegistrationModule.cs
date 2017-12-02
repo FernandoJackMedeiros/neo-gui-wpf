@@ -13,6 +13,11 @@ namespace Neo.Gui.Wpf.RegistrationModules
         protected override void Load(ContainerBuilder builder)
         {
             builder
+                .RegisterType<ClipboardManager>()
+                .As<IClipboardManager>()
+                .SingleInstance();
+
+            builder
                 .RegisterType<DialogManager>()
                 .As<IDialogManager>()
                 .SingleInstance();

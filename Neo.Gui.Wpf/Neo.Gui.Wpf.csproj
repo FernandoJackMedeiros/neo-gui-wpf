@@ -269,6 +269,7 @@
     <Compile Include="Controllers\LocalBlockChainController.cs" />
     <Compile Include="Converters\ColorToSolidColorBrushConverter.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Implementations\Managers\ClipboardManager.cs" />
     <Compile Include="RegistrationModules\ControllersRegistrationModule.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Implementations\Managers\DialogManager.cs" />
