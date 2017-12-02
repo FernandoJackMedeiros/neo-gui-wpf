@@ -7,6 +7,7 @@ using Neo.Gui.Base.Controllers;
 using Neo.Gui.Base.Extensions;
 using Neo.Gui.Base.Helpers.Interfaces;
 using Neo.Gui.Base.Globalization;
+using Neo.Gui.Base.Services;
 using Neo.Gui.Wpf.MVVM;
 using Neo.Network;
 using Neo.SmartContract;
@@ -18,7 +19,7 @@ namespace Neo.Gui.Wpf.Views.Development
     public class ContractParametersViewModel : ViewModelBase
     {
         private readonly IWalletController walletController;
-        private readonly IDispatchHelper dispatchHelper;
+        private readonly IDispatchService dispatchService;
 
         private ContractParametersContext context;
 
@@ -33,10 +34,10 @@ namespace Neo.Gui.Wpf.Views.Development
 
         public ContractParametersViewModel(
             IWalletController walletController,
-            IDispatchHelper dispatchHelper)
+            IDispatchService dispatchService)
         {
             this.walletController = walletController;
-            this.dispatchHelper = dispatchHelper;
+            this.dispatchService = dispatchService;
 
             this.ScriptHashAddresses = new ObservableCollection<string>();
         }
@@ -174,7 +175,7 @@ namespace Neo.Gui.Wpf.Views.Development
                 return;
             }
 
-            await this.dispatchHelper.InvokeOnMainUIThread(() =>
+            await this.dispatchService.InvokeOnMainUIThread(() =>
             {
                 this.ScriptHashAddresses.Clear();
                 this.CurrentValue = string.Empty;

@@ -10,6 +10,7 @@ using Neo.Gui.Base.Dialogs.Results;
 using Neo.Gui.Base.Helpers.Interfaces;
 using Neo.Gui.Base.Messages;
 using Neo.Gui.Base.Messaging.Interfaces;
+using Neo.Gui.Base.Services;
 using Neo.Gui.Wpf.MVVM;
 using Neo.Wallets;
 
@@ -19,7 +20,7 @@ namespace Neo.Gui.Wpf.Views.Assets
     {
         private readonly IWalletController walletController;
         private readonly IMessagePublisher messagePublisher;
-        private readonly IDispatchHelper dispatchHelper;
+        private readonly IDispatchService dispatchService;
 
         private AssetDescriptor asset;
 
@@ -37,11 +38,11 @@ namespace Neo.Gui.Wpf.Views.Assets
         public AssetDistributionViewModel(
             IWalletController walletController,
             IMessagePublisher messagePublisher,
-            IDispatchHelper dispatchHelper)
+            IDispatchService dispatchService)
         {
             this.walletController = walletController;
             this.messagePublisher = messagePublisher;
-            this.dispatchHelper = dispatchHelper;
+            this.dispatchService = dispatchService;
 
             this.Items = new ObservableCollection<TransactionOutputItem>();
         }
@@ -221,7 +222,7 @@ namespace Neo.Gui.Wpf.Views.Assets
                 this.DistributionEnabled = true;
             }
 
-            this.dispatchHelper.InvokeOnMainUIThread(() => this.Items.Clear());
+            this.dispatchService.InvokeOnMainUIThread(() => this.Items.Clear());
         }
 
         private IssueTransaction GenerateTransaction()

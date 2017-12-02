@@ -13,6 +13,7 @@ using Neo.Gui.Base.Globalization;
 using Neo.Gui.Base.Helpers.Interfaces;
 using Neo.Gui.Base.Messages;
 using Neo.Gui.Base.Messaging.Interfaces;
+using Neo.Gui.Base.Services;
 using Neo.Implementations.Wallets.EntityFramework;
 using Neo.Network;
 using Neo.SmartContract;
@@ -37,7 +38,7 @@ namespace Neo.Gui.Base.Controllers
 
         private readonly IBlockChainController blockChainController;
         private readonly ICertificateQueryService certificateQueryService;
-        private readonly INotificationHelper notificationHelper;
+        private readonly INotificationService notificationService;
         private readonly IMessagePublisher messagePublisher;
         private readonly IMessageSubscriber messageSubscriber;
 
@@ -67,13 +68,13 @@ namespace Neo.Gui.Base.Controllers
         public WalletController(
             IBlockChainController blockChainController,
             ICertificateQueryService certificateQueryService,
-            INotificationHelper notificationHelper,
+            INotificationService notificationService,
             IMessagePublisher messagePublisher,
             IMessageSubscriber messageSubscriber)
         {
             this.blockChainController = blockChainController;
             this.certificateQueryService = certificateQueryService;
-            this.notificationHelper = notificationHelper;
+            this.notificationService = notificationService;
             this.messagePublisher = messagePublisher;
             this.messageSubscriber = messageSubscriber;
 
@@ -135,7 +136,7 @@ namespace Neo.Gui.Base.Controllers
             File.Move(pathNew, walletPath);
 
             // TODO [AboimPinto]: this string need to be localized.
-            this.notificationHelper.ShowInformationNotification("Wallet migration completed.");
+            this.notificationService.ShowInformationNotification("Wallet migration completed.");
         }
 
         public void CreateWallet(string walletPath, string password)
@@ -594,7 +595,7 @@ namespace Neo.Gui.Base.Controllers
 
             if (transaction == null)
             {
-                this.notificationHelper.ShowErrorNotification(Strings.InsufficientFunds);
+                this.notificationService.ShowErrorNotification(Strings.InsufficientFunds);
                 return;
             }
 
@@ -605,7 +606,7 @@ namespace Neo.Gui.Base.Controllers
             }
             catch (InvalidOperationException)
             {
-                this.notificationHelper.ShowErrorNotification(Strings.UnsynchronizedBlock);
+                this.notificationService.ShowErrorNotification(Strings.UnsynchronizedBlock);
                 return;
             }
 
@@ -617,11 +618,11 @@ namespace Neo.Gui.Base.Controllers
 
                 this.Relay(transaction);
 
-                this.notificationHelper.ShowSuccessNotification($"{Strings.SendTxSucceedMessage} {transaction.Hash}");
+                this.notificationService.ShowSuccessNotification($"{Strings.SendTxSucceedMessage} {transaction.Hash}");
             }
             else
             {
-                this.notificationHelper.ShowSuccessNotification($"{Strings.IncompletedSignatureMessage} {context}");
+                this.notificationService.ShowSuccessNotification($"{Strings.IncompletedSignatureMessage} {context}");
             }
         }
 
@@ -724,7 +725,7 @@ namespace Neo.Gui.Base.Controllers
             }
             catch (CryptographicException)
             {
-                this.notificationHelper.ShowErrorNotification(Strings.PasswordIncorrect);
+                this.notificationService.ShowErrorNotification(Strings.PasswordIncorrect);
             }
 
             return null;

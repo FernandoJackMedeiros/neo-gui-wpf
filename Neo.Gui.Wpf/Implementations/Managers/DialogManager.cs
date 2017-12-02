@@ -1,16 +1,16 @@
 ﻿using Autofac;
 using Neo.Gui.Base.Dialogs.Interfaces;
-using Neo.Gui.Base.Helpers.Interfaces;
+using Neo.Gui.Base.Managers;
 
-namespace Neo.Gui.Wpf.Helpers
+namespace Neo.Gui.Wpf.Implementations.Managers
 {
-    public class DialogHelper : IDialogHelper
+    public class DialogManager : IDialogManager
     {
         #region Private Fields 
         private static ILifetimeScope containerLifetimeScope;
         #endregion
 
-        #region IDialogHelper implementation 
+        #region IDialogManager implementation 
         public T ShowDialog<T>(params string[] parameters)
         {
             var dialogResult = default(T);

@@ -11,6 +11,7 @@ using Neo.Gui.Base.Dialogs.Interfaces;
 using Neo.Gui.Base.Dialogs.Results;
 using Neo.Gui.Base.Helpers.Interfaces;
 using Neo.Gui.Base.Globalization;
+using Neo.Gui.Base.Services;
 using Neo.Gui.Wpf.MVVM;
 using Neo.IO.Json;
 using Neo.SmartContract;
@@ -22,7 +23,7 @@ namespace Neo.Gui.Wpf.Views.Wallets
     public class TradeViewModel : ViewModelBase, IDialogViewModel<TradeDialogResult>
     {
         private readonly IWalletController walletController;
-        private readonly IDispatchHelper dispatchHelper;
+        private readonly IDispatchService dispatchService;
 
         private string payToAddress;
         private string myRequest;
@@ -36,10 +37,10 @@ namespace Neo.Gui.Wpf.Views.Wallets
 
         public TradeViewModel(
             IWalletController walletController,
-            IDispatchHelper dispatchHelper)
+            IDispatchService dispatchService)
         {
             this.walletController = walletController;
-            this.dispatchHelper = dispatchHelper;
+            this.dispatchService = dispatchService;
 
             this.Items = new ObservableCollection<TransactionOutputItem>();
         }
@@ -69,7 +70,7 @@ namespace Neo.Gui.Wpf.Views.Wallets
                     this.ScriptHash = null;
                 }
 
-                this.dispatchHelper.InvokeOnMainUIThread(() => this.Items.Clear());
+                this.dispatchService.InvokeOnMainUIThread(() => this.Items.Clear());
             }
         }
 

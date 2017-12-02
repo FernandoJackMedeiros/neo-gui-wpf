@@ -10,9 +10,11 @@ using Neo.Gui.Base.Helpers.Interfaces;
 using Neo.Gui.Base.Messages;
 using Neo.Gui.Base.Messaging.Interfaces;
 using Neo.Gui.Base.Globalization;
+using Neo.Gui.Base.Managers;
+using Neo.Gui.Base.Services;
 using Neo.Gui.Wpf.Certificates;
 using Neo.Gui.Wpf.Extensions;
-using Neo.Gui.Wpf.Helpers;
+using Neo.Gui.Wpf.Implementations.Managers;
 using Neo.Gui.Wpf.MarkupExtensions;
 using Neo.Gui.Wpf.RegistrationModules;
 using Neo.Gui.Wpf.Views.Home;
@@ -45,11 +47,11 @@ namespace Neo.Gui.Wpf
             Debug.Assert(containerLifetimeScope != null);
 
             // Set static lifetime scopes
-            DialogHelper.SetLifetimeScope(containerLifetimeScope);
+            DialogManager.SetLifetimeScope(containerLifetimeScope);
             DataContextBindingExtension.SetLifetimeScope(containerLifetimeScope);
 
-            var dispatchHelper = containerLifetimeScope.Resolve<IDispatchHelper>();
-            var themeHelper = containerLifetimeScope.Resolve<IThemeHelper>();
+            var dispatchHelper = containerLifetimeScope.Resolve<IDispatchService>();
+            var themeHelper = containerLifetimeScope.Resolve<IThemeManager>();
             var versionHelper = containerLifetimeScope.Resolve<IVersionHelper>();
 
             Debug.Assert(dispatchHelper != null);

@@ -5,6 +5,7 @@ using Neo.Core;
 using Neo.Gui.Base.Controllers;
 using Neo.Gui.Base.Data;
 using Neo.Gui.Base.Helpers.Interfaces;
+using Neo.Gui.Base.Services;
 using Neo.Gui.Wpf.MVVM;
 
 namespace Neo.Gui.Wpf.Views.Wallets
@@ -12,14 +13,14 @@ namespace Neo.Gui.Wpf.Views.Wallets
     public class TradeVerificationViewModel : ViewModelBase
     {
         private readonly IWalletController walletController;
-        private readonly IDispatchHelper dispatchHelper;
+        private readonly IDispatchService dispatchService;
 
         public TradeVerificationViewModel(
             IWalletController walletController,
-            IDispatchHelper dispatchHelper)
+            IDispatchService dispatchService)
         {
             this.walletController = walletController;
-            this.dispatchHelper = dispatchHelper;
+            this.dispatchService = dispatchService;
 
             this.Items = new ObservableCollection<TransactionOutputItem>();
         }
@@ -42,7 +43,7 @@ namespace Neo.Gui.Wpf.Views.Wallets
 
         public void SetOutputs(IEnumerable<TransactionOutput> outputs)
         {
-            this.dispatchHelper.InvokeOnMainUIThread(() =>
+            this.dispatchService.InvokeOnMainUIThread(() =>
             {
                 foreach (var output in outputs)
                 {

@@ -9,6 +9,7 @@ using Neo.Gui.Base.Dialogs.Interfaces;
 using Neo.Gui.Base.Dialogs.Results;
 using Neo.Gui.Base.Extensions;
 using Neo.Gui.Base.Helpers.Interfaces;
+using Neo.Gui.Base.Managers;
 using Neo.Gui.Base.Theming;
 using Neo.Gui.Wpf.MVVM;
 
@@ -18,7 +19,7 @@ namespace Neo.Gui.Wpf.Views.Settings
     {
         private readonly IWalletController walletController;
         private readonly IProcessHelper processHelper;
-        private readonly IThemeHelper themeHelper;
+        private readonly IThemeManager themeManager;
 
         private string currentNEP5ContractsList;
         private string nep5ContractsList;
@@ -39,11 +40,11 @@ namespace Neo.Gui.Wpf.Views.Settings
         public SettingsViewModel(
             IWalletController walletController,
             IProcessHelper processHelper,
-            IThemeHelper themeHelper)
+            IThemeManager themeManager)
         {
             this.walletController = walletController;
             this.processHelper = processHelper;
-            this.themeHelper = themeHelper;
+            this.themeManager = themeManager;
 
             this.LoadSettings();
         }
@@ -77,7 +78,7 @@ namespace Neo.Gui.Wpf.Views.Settings
 
         private void LoadAppearanceSettings()
         {
-            var currentTheme = this.themeHelper.CurrentTheme;
+            var currentTheme = this.themeManager.CurrentTheme;
 
             // Set theme style
             this.currentStyle = currentTheme.Style;

@@ -6,6 +6,7 @@ using Neo.Gui.Base.Controllers;
 using Neo.Gui.Base.Data;
 using Neo.Gui.Base.Extensions;
 using Neo.Gui.Base.Helpers.Interfaces;
+using Neo.Gui.Base.Services;
 using Neo.Gui.Wpf.MVVM;
 using Neo.Wallets;
 using NeoSettings = Neo.Gui.Wpf.Properties.Settings;
@@ -15,7 +16,7 @@ namespace Neo.Gui.Wpf.Views.Transactions
     public class BulkPayViewModel : ViewModelBase
     {
         private readonly IWalletController walletController;
-        private readonly IDispatchHelper dispatchHelper;
+        private readonly IDispatchService dispatchService;
 
         private bool assetSelectionEnabled;
 
@@ -27,10 +28,10 @@ namespace Neo.Gui.Wpf.Views.Transactions
 
         public BulkPayViewModel(
             IWalletController walletController,
-            IDispatchHelper dispatchHelper)
+            IDispatchService dispatchService)
         {
             this.walletController = walletController;
-            this.dispatchHelper = dispatchHelper;
+            this.dispatchService = dispatchService;
 
             this.Assets = new ObservableCollection<AssetDescriptor>();
         }
@@ -90,7 +91,7 @@ namespace Neo.Gui.Wpf.Views.Transactions
 
         internal void Load(AssetDescriptor asset = null)
         {
-            this.dispatchHelper.InvokeOnMainUIThread(() =>
+            this.dispatchService.InvokeOnMainUIThread(() =>
             {
                 this.Assets.Clear();
 

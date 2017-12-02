@@ -9,6 +9,8 @@ using Neo.Gui.Base.Messages;
 using Neo.Gui.Base.Messaging.Interfaces;
 using Neo.Gui.Base.MVVM;
 using Neo.Gui.Base.Globalization;
+using Neo.Gui.Base.Managers;
+using Neo.Gui.Base.Services;
 using Neo.Gui.Wpf.MVVM;
 using Neo.Gui.Wpf.Views.Contracts;
 using Neo.Gui.Wpf.Views.Development;
@@ -31,11 +33,11 @@ namespace Neo.Gui.Wpf.Views.Home
         private const string OfficialWebsiteUrl = "https://neo.org/";
 
         private readonly IWalletController walletController;
-        private readonly IDialogHelper dialogHelper;
+        private readonly IDialogManager dialogManager;
         private readonly IProcessHelper processHelper;
         private readonly IMessagePublisher messagePublisher;
         private readonly IMessageSubscriber messageSubscriber;
-        private readonly IDispatchHelper dispatchHelper;
+        private readonly IDispatchService dispatchService;
 
         private bool nextBlockProgressIsIndeterminate;
         private double nextBlockProgressFraction;
@@ -51,18 +53,18 @@ namespace Neo.Gui.Wpf.Views.Home
         #region Constructor
         public HomeViewModel(
             IWalletController walletController,
-            IDialogHelper dialogHelper, 
+            IDialogManager dialogManager, 
             IProcessHelper processHelper,
             IMessagePublisher messagePublisher,
             IMessageSubscriber messageSubscriber, 
-            IDispatchHelper dispatchHelper)
+            IDispatchService dispatchService)
         {
             this.walletController = walletController;
-            this.dialogHelper = dialogHelper;
+            this.dialogManager = dialogManager;
             this.processHelper = processHelper;
             this.messagePublisher = messagePublisher;
             this.messageSubscriber = messageSubscriber;
-            this.dispatchHelper = dispatchHelper;
+            this.dispatchService = dispatchService;
         }
         #endregion
 
@@ -222,7 +224,7 @@ namespace Neo.Gui.Wpf.Views.Home
 
         private void CreateWallet()
         {
-            var result = this.dialogHelper.ShowDialog<CreateWalletDialogResult>();
+            var result = this.dialogManager.ShowDialog<CreateWalletDialogResult>();
 
             if (result == null) return;
 
@@ -236,7 +238,7 @@ namespace Neo.Gui.Wpf.Views.Home
 
         private void OpenWallet()
         {
-            var result = this.dialogHelper.ShowDialog<OpenWalletDialogResult>();
+            var result = this.dialogManager.ShowDialog<OpenWalletDialogResult>();
 
             if (result == null) return;
 
@@ -244,7 +246,7 @@ namespace Neo.Gui.Wpf.Views.Home
 
             if (this.walletController.WalletNeedUpgrade(result.WalletPath))
             {
-                var migrationApproved = this.dialogHelper.ShowDialog<YesOrNoDialogResult>("ApproveWalletMigrationDialog");
+                var migrationApproved = this.dialogManager.ShowDialog<YesOrNoDialogResult>("ApproveWalletMigrationDialog");
 
                 if (!migrationApproved.Yes) return;
 
@@ -264,12 +266,12 @@ namespace Neo.Gui.Wpf.Views.Home
 
         private void ChangePassword()
         {
-            this.dialogHelper.ShowDialog<ChangePasswordDialogResult>();
+            this.dialogManager.ShowDialog<ChangePasswordDialogResult>();
         }
 
         private async void RebuildIndex()
         {
-            await this.dispatchHelper.InvokeOnMainUIThread(() =>
+            await this.dispatchService.InvokeOnMainUIThread(() =>
             {
                 this.messagePublisher.Publish(new ClearAssetsMessage());
                 this.messagePublisher.Publish(new ClearTransactionsMessage());
@@ -280,7 +282,7 @@ namespace Neo.Gui.Wpf.Views.Home
 
         private void RestoreAccounts()
         {
-            this.dialogHelper.ShowDialog<RestoreAccountsDialogResult>();
+            this.dialogManager.ShowDialog<RestoreAccountsDialogResult>();
         }
 
         private void Exit()
@@ -290,17 +292,17 @@ namespace Neo.Gui.Wpf.Views.Home
 
         private void Transfer()
         {
-            this.dialogHelper.ShowDialog<TransferDialogResult>();
+            this.dialogManager.ShowDialog<TransferDialogResult>();
         }
 
         private void ShowTransactionDialog()
         {
-            this.dialogHelper.ShowDialog<TradeDialogResult>();
+            this.dialogManager.ShowDialog<TradeDialogResult>();
         }
 
         private void ShowSigningDialog()
         {
-            this.dialogHelper.ShowDialog<SigningDialogResult>();
+            this.dialogManager.ShowDialog<SigningDialogResult>();
         }
 
         private static void Claim()
@@ -311,32 +313,32 @@ namespace Neo.Gui.Wpf.Views.Home
 
         private void RequestCertificate()
         {
-            this.dialogHelper.ShowDialog<CertificateApplicationDialogResult>();
+            this.dialogManager.ShowDialog<CertificateApplicationDialogResult>();
         }
 
         private void AssetRegistration()
         {
-            this.dialogHelper.ShowDialog<AssetRegistrationDialogResult>();
+            this.dialogManager.ShowDialog<AssetRegistrationDialogResult>();
         }
 
         private void DistributeAsset()
         {
-            this.dialogHelper.ShowDialog<AssetDistributionDialogResult>();
+            this.dialogManager.ShowDialog<AssetDistributionDialogResult>();
         }
 
         private void DeployContract()
         {
-            this.dialogHelper.ShowDialog<DeployContractDialogResult>();
+            this.dialogManager.ShowDialog<DeployContractDialogResult>();
         }
 
         private void ShowElectionDialog()
         {
-            this.dialogHelper.ShowDialog<ElectionDialogResult>();
+            this.dialogManager.ShowDialog<ElectionDialogResult>();
         }
 
         private void ShowSettings()
         {
-            this.dialogHelper.ShowDialog<SettingsDialogResult>();
+            this.dialogManager.ShowDialog<SettingsDialogResult>();
         }
 
         private static void CheckForHelp()
