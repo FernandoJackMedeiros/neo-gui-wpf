@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Neo.Gui.Base.Collections;
 using Neo.Gui.Base.Data;
 using Neo.Gui.Base.Helpers.Interfaces;
+using Neo.Gui.Base.Managers;
 using Neo.Gui.Base.Messages;
 using Neo.Gui.Base.Messaging.Interfaces;
 using Neo.Gui.Base.MVVM;
@@ -19,6 +20,7 @@ namespace Neo.Gui.Wpf.Views.Home
     {
         #region Private Fields 
         private readonly IMessageSubscriber messageSubscriber;
+        private readonly IClipboardManager clipboardManager;
         private readonly IProcessHelper processHelper;
 
         private TransactionItem selectedTransaction;
@@ -53,9 +55,11 @@ namespace Neo.Gui.Wpf.Views.Home
         #region Constructor 
         public TransactionsViewModel(
             IMessageSubscriber messageSubscriber,
+            IClipboardManager clipboardManager,
             IProcessHelper processHelper)
         {
             this.messageSubscriber = messageSubscriber;
+            this.clipboardManager = clipboardManager;
             this.processHelper = processHelper;
 
             this.Transactions = new ConcurrentObservableCollection<TransactionItem>();
@@ -81,7 +85,7 @@ namespace Neo.Gui.Wpf.Views.Home
         {
             if (this.SelectedTransaction == null) return;
 
-            Clipboard.SetDataObject(this.SelectedTransaction.Id);
+            this.clipboardManager.SetText(this.SelectedTransaction.Id);
         }
 
         private void ViewSelectedTransactionDetails()

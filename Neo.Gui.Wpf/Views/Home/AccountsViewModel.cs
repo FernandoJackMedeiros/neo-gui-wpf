@@ -10,6 +10,7 @@ using Neo.Gui.Base.Messages;
 using Neo.Gui.Base.Messaging.Interfaces;
 using Neo.Gui.Base.MVVM;
 using Neo.Gui.Base.Globalization;
+using Neo.Gui.Base.Managers;
 using Neo.Gui.Wpf.MVVM;
 using Neo.Gui.Wpf.Views.Accounts;
 using Neo.Gui.Wpf.Views.Voting;
@@ -28,6 +29,7 @@ namespace Neo.Gui.Wpf.Views.Home
         #region Private Fields 
         private readonly IWalletController walletController;
         private readonly IMessageSubscriber messageSubscriber;
+        private readonly IClipboardManager clipboardManager;
         private readonly IProcessHelper processHelper;
 
         private AccountItem selectedAccount;
@@ -106,10 +108,12 @@ namespace Neo.Gui.Wpf.Views.Home
         public AccountsViewModel(
             IWalletController walletController,
             IMessageSubscriber messageSubscriber, 
+            IClipboardManager clipboardManager,
             IProcessHelper processHelper)
         {
             this.walletController = walletController;
             this.messageSubscriber = messageSubscriber;
+            this.clipboardManager = clipboardManager;
             this.processHelper = processHelper;
 
             this.Accounts = new ObservableCollection<AccountItem>();
@@ -225,11 +229,7 @@ namespace Neo.Gui.Wpf.Views.Home
         {
             if (this.SelectedAccount == null) return;
 
-            try
-            {
-                Clipboard.SetText(this.SelectedAccount.Address);
-            }
-            catch (ExternalException) { }
+            this.clipboardManager.SetText(this.SelectedAccount.Address);
         }
 
         private void DeleteAccount()

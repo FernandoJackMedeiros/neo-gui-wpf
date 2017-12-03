@@ -5,6 +5,7 @@ using Neo.Gui.Base.Controllers;
 using Neo.Gui.Base.Dialogs.Interfaces;
 using Neo.Gui.Base.Dialogs.Results;
 using Neo.Gui.Base.Globalization;
+using Neo.Gui.Base.Managers;
 using Neo.Gui.Wpf.MVVM;
 using Neo.Network;
 using Neo.SmartContract;
@@ -15,15 +16,18 @@ namespace Neo.Gui.Wpf.Views.Transactions
     public class SigningViewModel : ViewModelBase, IDialogViewModel<SigningDialogResult>
     {
         private readonly IWalletController walletController;
+        private readonly IClipboardManager clipboardManager;
 
         private string input;
         private ContractParametersContext output;
         private bool broadcastVisible;
 
         public SigningViewModel(
-            IWalletController walletController)
+            IWalletController walletController,
+            IClipboardManager clipboardManager)
         {
             this.walletController = walletController;
+            this.clipboardManager = clipboardManager;
         }
 
         public string Input
@@ -105,7 +109,7 @@ namespace Neo.Gui.Wpf.Views.Transactions
 
             // TODO Highlight output textbox text
 
-            Clipboard.SetText(this.output.ToString());
+            this.clipboardManager.SetText(this.output.ToString());
         }
 
         private void Broadcast()

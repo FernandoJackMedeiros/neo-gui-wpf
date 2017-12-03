@@ -7,7 +7,11 @@ namespace Neo.Gui.Wpf.Implementations.Managers
     {
         public void SetText(string text)
         {
-            Clipboard.SetText(text);
+            try
+            {
+                Clipboard.SetText(text);
+            }
+            catch { }
         }
     }
 }
