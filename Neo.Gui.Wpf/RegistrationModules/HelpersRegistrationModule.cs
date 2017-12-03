@@ -28,13 +28,18 @@ namespace Neo.Gui.Wpf.RegistrationModules
                 .SingleInstance();
 
             builder
+                .RegisterType<NotificationService>()
+                .As<INotificationService>()
+                .SingleInstance();
+
+            builder
                 .RegisterType<ProcessHelper>()
                 .As<IProcessHelper>()
                 .SingleInstance();
 
             builder
-                .RegisterType<NotificationService>()
-                .As<INotificationService>()
+                .RegisterType<SettingsManager>()
+                .As<ISettingsManager>()
                 .SingleInstance();
 
             builder
